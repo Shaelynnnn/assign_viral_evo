@@ -41,7 +41,7 @@ def jukes_cantor(reference_sequence: str, distant_sequence: str) -> float:
     if p == 0:
         return 0.0
     if p >= 0.75:
-        return float("n")
+        return float("inf")
     # JC
     d_site = -0.75 * math.log(1 - 4 * p / 3)
 
