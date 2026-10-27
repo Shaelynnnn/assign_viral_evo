@@ -69,4 +69,39 @@ def kimura_two_parameter(reference_sequence: str, distant_sequence: str) -> floa
         For example 1.196.
 
     """
-    raise NotImplementedError()
+    n_sites = 0
+    transitions = 0
+    transversions = 0
+
+    for a, b in zip(reference_sequence, distant_sequence):
+        a, b = a.upper(), b.upper()
+
+        # skip the gaps
+        if a not in "AGTC" or b not in "AGTC":
+            continue
+
+        n_sites += 1
+        if a == b:
+            continue
+
+        # transitions: A<->G, C<->T
+        if(a, b) in {("A", "G"), ("G", "A"), ("C", "T"), ("T", "C")}:
+            transitions += 1
+        else:
+            transversions += 1
+
+    if n_sites == 0:
+        return 0.0
+
+    p = transitions / n_sites
+    q = transversions / n_sites
+
+    # saturations
+    if 1 - 2 * p - q <= 0 or 1 - 2 * q <= 0:
+        return float("inf")
+
+    d_site = -0.5 * math.log(1 - 2 * p - q) - 0.25 * math.log(1 - 2 * q)
+
+    return d_site * n_sites
+
+    # raise NotImplementedError()
